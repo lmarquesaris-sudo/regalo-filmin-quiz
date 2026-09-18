@@ -17,7 +17,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz Segunda Guerra Mundial — Regalo Filmin</title>
+<title>Reto Sorpresa — Segunda Guerra Mundial</title>
 <style>
   :root {
     --bg: #0a0a0a;
@@ -225,13 +225,11 @@
 
   <!-- PANTALLA INICIO -->
   <div id="start-screen">
-    <div class="brand"><div class="brand-name">FIL<span>MIN</span></div></div>
-    <div class="tag">Reto · Segunda Guerra Mundial</div>
+    <div class="tag">Reto Sorpresa · Segunda Guerra Mundial</div>
     <h1>🎖️ Para desbloquear tu regalo, Fernando</h1>
     <p class="sub">
       Debes contestar bien a estas dos preguntas sobre la Segunda Guerra
-      Mundial. Si las aciertas, desbloqueas tu regalo: Filmin, la mejor
-      plataforma para ver películas de guerra.
+      Mundial. Si las aciertas, desbloqueas tu regalo.
     </p>
     <button id="start-btn">Empezar el reto</button>
   </div>
@@ -287,9 +285,8 @@
     </div>
 
     <button id="retry-btn-2" class="secondary">Jugar de nuevo</button>
+    <div class="footer-note">filmin.es · Regalo digital</div>
   </div>
-
-  <div class="footer-note">filmin.es · Regalo digital</div>
 </div>
 
 <script>
@@ -300,14 +297,14 @@
   // ---- PREGUNTAS ----
   const QUESTIONS = [
     {
-      q: "¿En qué año comenzó la Segunda Guerra Mundial?",
-      options: ["1937", "1939", "1941", "1945"],
+      q: "¿Cómo se llamaba el plan alemán para invadir el Reino Unido en 1940, finalmente cancelado?",
+      options: ["Operación Barbarroja", "Operación León Marino", "Operación Torch", "Operación Weserübung"],
       correct: 1
     },
     {
-      q: "¿Qué nombre en clave recibió el desembarco aliado en Normandía en junio de 1944?",
-      options: ["Operación Overlord", "Operación Husky", "Operación Neptuno", "Operación Cobra"],
-      correct: 0
+      q: "¿Qué acorazado alemán fue hundido por la Royal Navy en mayo de 1941 tras una intensa persecución en el Atlántico?",
+      options: ["Tirpitz", "Scharnhorst", "Bismarck", "Graf Spee"],
+      correct: 2
     }
   ];
 
