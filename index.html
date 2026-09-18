@@ -1,0 +1,424 @@
+<!--
+  QUIZ SEGUNDA GUERRA MUNDIAL -> DESBLOQUEA REGALO FILMIN
+  =========================================================
+  Cómo editarlo (todo texto plano):
+
+  1. Cambia "PLATAFORMA_MENSAJE" y el nombre por defecto si quieres.
+  2. Busca "QR_DESTINO" en el <script> final: pon ahí tu código/enlace real
+     de regalo de Filmin si ya lo tienes comprado. Si no, deja la URL genérica
+     de filmin.es/regala.
+  3. UMBRAL_APROBADO controla cuántas preguntas (de 2) hay que acertar para
+     desbloquear el regalo. Por defecto 2 (hay que acertar las dos).
+  4. Abre el archivo con doble clic para jugarlo en el navegador.
+     Necesita internet la primera vez (para generar el QR).
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Segunda Guerra Mundial — Regalo Filmin</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-soft: #161616;
+    --red: #e0473e;
+    --text: #ffffff;
+    --text-dim: #b8b8b8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: radial-gradient(circle at top left, #1a1a1a 0%, #050505 60%);
+    color: var(--text);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg-soft);
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .reel-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: repeating-linear-gradient(
+      to right, var(--red) 0 14px, transparent 14px 28px
+    );
+  }
+
+  .brand {
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .brand-name {
+    font-size: 18pt;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .brand-name span { color: var(--red); }
+
+  .tag {
+    text-align: center;
+    font-size: 8pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: 16pt;
+    text-align: center;
+    margin: 0 0 10px;
+    line-height: 1.3;
+  }
+
+  p.sub {
+    text-align: center;
+    font-size: 10pt;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin: 0 0 24px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #0f0f0f;
+    color: var(--text);
+    font-size: 11pt;
+    margin-bottom: 18px;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: var(--red);
+    color: #fff;
+    font-size: 11pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  button:hover { opacity: 0.9; }
+  button:disabled { background: #3a3a3a; cursor: not-allowed; }
+
+  button.secondary {
+    background: transparent;
+    border: 1px solid #444;
+    margin-top: 10px;
+  }
+
+  .progress-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8pt;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: #262626;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--red);
+    width: 0%;
+    transition: width 0.3s;
+  }
+
+  .question {
+    font-size: 13pt;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 18px;
+    min-height: 60px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .option {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #0f0f0f;
+    font-size: 10.5pt;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .option:hover { border-color: #555; }
+  .option.selected { border-color: var(--red); background: rgba(224,71,62,0.12); }
+  .option.correct { border-color: #4caf50; background: rgba(76,175,80,0.15); }
+  .option.wrong { border-color: var(--red); background: rgba(224,71,62,0.2); }
+
+  .hidden { display: none !important; }
+
+  /* Resultado */
+  .result-icon { text-align: center; font-size: 40pt; margin-bottom: 10px; }
+  .score-line { text-align: center; font-size: 11pt; color: var(--text-dim); margin-bottom: 20px; }
+
+  /* Tarjeta regalo (pantalla de éxito) */
+  .gift-card {
+    background: #000;
+    border-radius: 12px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .gift-reel {
+    position: absolute; top: 0; left: 0; width: 5mm; height: 100%;
+    background: repeating-linear-gradient(to bottom, var(--red) 0 4mm, #000 4mm 8mm);
+  }
+  .gift-inner { margin-left: 16px; }
+  .gift-brand { display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 16px;}
+  .gift-brand .brand-name { font-size: 15pt; margin: 0; }
+  .gift-brand .tag { font-size: 7pt; margin: 0; }
+  .gift-for { font-size: 7pt; text-transform: uppercase; letter-spacing: 2px; color: var(--red); margin-bottom: 2px; }
+  .gift-name { font-size: 13pt; font-weight: 700; margin-bottom: 10px; }
+  .gift-msg { font-size: 9pt; color: var(--text-dim); font-style: italic; line-height: 1.5; margin-bottom: 16px; }
+  .qr-wrap { text-align: center; }
+  .qr-wrap img { width: 130px; height: 130px; background: #fff; padding: 8px; border-radius: 8px; }
+  .qr-caption { font-size: 8pt; color: var(--text-dim); margin-top: 8px; }
+
+  .footer-note {
+    font-size: 8pt;
+    color: #555;
+    text-align: center;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="reel-top"></div>
+
+  <!-- PANTALLA INICIO -->
+  <div id="start-screen">
+    <div class="brand"><div class="brand-name">FIL<span>MIN</span></div></div>
+    <div class="tag">Reto · Segunda Guerra Mundial</div>
+    <h1>🎖️ ¿Te ganas tu suscripción a Filmin?</h1>
+    <p class="sub">
+      2 preguntas sobre la Segunda Guerra Mundial. Acierta las dos
+      y desbloqueas un regalo: suscripción a Filmin, el hogar del cine
+      bélico — desde clásicos como <em>Salvar al soldado Ryan</em> y
+      <em>La lista de Schindler</em> hasta joyas de guerra independientes
+      y documentales históricos.
+    </p>
+    <input type="text" id="player-name" placeholder="Tu nombre (opcional)">
+    <button id="start-btn">Empezar el reto</button>
+  </div>
+
+  <!-- PANTALLA QUIZ -->
+  <div id="quiz-screen" class="hidden">
+    <div class="progress-wrap">
+      <span id="q-counter">Pregunta 1/2</span>
+      <span id="q-score">Aciertos: 0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="question" id="question-text"></div>
+    <div class="options" id="options-container"></div>
+    <button id="next-btn" disabled>Siguiente</button>
+  </div>
+
+  <!-- PANTALLA SUSPENSO -->
+  <div id="fail-screen" class="hidden">
+    <div class="result-icon">🎬</div>
+    <h1>¡Casi lo tienes!</h1>
+    <p class="score-line" id="fail-score"></p>
+    <p class="sub">Hay que acertar las 2 preguntas para desbloquear el regalo. Repasa un poco de historia y vuelve a intentarlo.</p>
+    <button id="retry-btn">Volver a intentarlo</button>
+  </div>
+
+  <!-- PANTALLA APROBADO -->
+  <div id="pass-screen" class="hidden">
+    <div class="result-icon">🏆</div>
+    <h1>¡Reto superado!</h1>
+    <p class="score-line" id="pass-score"></p>
+
+    <div class="gift-card">
+      <div class="gift-reel"></div>
+      <div class="gift-inner">
+        <div class="gift-brand">
+          <div class="brand-name">FIL<span style="color:var(--red)">MIN</span></div>
+          <div class="tag">Tarjeta Regalo</div>
+        </div>
+        <div class="gift-for">Para</div>
+        <div class="gift-name" id="gift-name">Ganador del reto</div>
+        <div class="gift-msg">
+          🪖 Por tu victoria en el frente histórico: suscripción a Filmin,
+          el catálogo con más cine bélico — <em>Salvar al soldado Ryan</em>,
+          <em>La lista de Schindler</em>, <em>1917</em>, <em>Dunkerque</em>,
+          <em>Full Metal Jacket</em> y decenas de joyas de guerra clásicas,
+          independientes y documentales históricos.
+        </div>
+        <div class="qr-wrap">
+          <img id="qr-img" alt="Código QR del regalo">
+          <div class="qr-caption">Escanea para canjear tu suscripción de cine bélico</div>
+        </div>
+      </div>
+    </div>
+
+    <button id="retry-btn-2" class="secondary">Jugar de nuevo</button>
+  </div>
+
+  <div class="footer-note">filmin.es · Regalo digital</div>
+</div>
+
+<script>
+  // ---- CONFIGURACIÓN ----
+  const UMBRAL_APROBADO = 2; // aciertos mínimos sobre 2 (hay que acertar las dos)
+  const QR_DESTINO = "https://www.filmin.es/regala"; // sustituye por tu código/enlace real si lo tienes
+
+  // ---- PREGUNTAS ----
+  const QUESTIONS = [
+    {
+      q: "¿En qué año comenzó la Segunda Guerra Mundial?",
+      options: ["1937", "1939", "1941", "1945"],
+      correct: 1
+    },
+    {
+      q: "¿Qué nombre en clave recibió el desembarco aliado en Normandía en junio de 1944?",
+      options: ["Operación Overlord", "Operación Husky", "Operación Neptuno", "Operación Cobra"],
+      correct: 0
+    }
+  ];
+
+  // ---- ESTADO ----
+  let current = 0;
+  let score = 0;
+  let selectedIndex = null;
+
+  const startScreen = document.getElementById("start-screen");
+  const quizScreen = document.getElementById("quiz-screen");
+  const failScreen = document.getElementById("fail-screen");
+  const passScreen = document.getElementById("pass-screen");
+
+  const qCounter = document.getElementById("q-counter");
+  const qScore = document.getElementById("q-score");
+  const progressFill = document.getElementById("progress-fill");
+  const questionText = document.getElementById("question-text");
+  const optionsContainer = document.getElementById("options-container");
+  const nextBtn = document.getElementById("next-btn");
+
+  document.getElementById("start-btn").addEventListener("click", startQuiz);
+  document.getElementById("retry-btn").addEventListener("click", resetQuiz);
+  document.getElementById("retry-btn-2").addEventListener("click", resetQuiz);
+  nextBtn.addEventListener("click", nextQuestion);
+
+  function startQuiz() {
+    startScreen.classList.add("hidden");
+    quizScreen.classList.remove("hidden");
+    current = 0;
+    score = 0;
+    renderQuestion();
+  }
+
+  function resetQuiz() {
+    failScreen.classList.add("hidden");
+    passScreen.classList.add("hidden");
+    startScreen.classList.remove("hidden");
+  }
+
+  function renderQuestion() {
+    selectedIndex = null;
+    nextBtn.disabled = true;
+    const total = QUESTIONS.length;
+    const item = QUESTIONS[current];
+
+    qCounter.textContent = `Pregunta ${current + 1}/${total}`;
+    qScore.textContent = `Aciertos: ${score}`;
+    progressFill.style.width = `${(current / total) * 100}%`;
+    questionText.textContent = item.q;
+
+    optionsContainer.innerHTML = "";
+    item.options.forEach((opt, idx) => {
+      const div = document.createElement("div");
+      div.className = "option";
+      div.textContent = opt;
+      div.addEventListener("click", () => selectOption(idx));
+      optionsContainer.appendChild(div);
+    });
+
+    nextBtn.textContent = (current === total - 1) ? "Ver resultado" : "Siguiente";
+  }
+
+  function selectOption(idx) {
+    if (selectedIndex !== null) return; // ya respondida
+    selectedIndex = idx;
+    const item = QUESTIONS[current];
+    const optionEls = optionsContainer.querySelectorAll(".option");
+
+    optionEls.forEach((el, i) => {
+      if (i === item.correct) el.classList.add("correct");
+      else if (i === idx) el.classList.add("wrong");
+    });
+
+    if (idx === item.correct) score++;
+    qScore.textContent = `Aciertos: ${score}`;
+    nextBtn.disabled = false;
+  }
+
+  function nextQuestion() {
+    current++;
+    if (current < QUESTIONS.length) {
+      renderQuestion();
+    } else {
+      finishQuiz();
+    }
+  }
+
+  function finishQuiz() {
+    quizScreen.classList.add("hidden");
+    const total = QUESTIONS.length;
+
+    if (score >= UMBRAL_APROBADO) {
+      const name = document.getElementById("player-name").value.trim();
+      document.getElementById("gift-name").textContent = name || "Ganador del reto";
+      document.getElementById("pass-score").textContent =
+        `Has acertado ${score} de ${total} preguntas.`;
+
+      const qrImg = document.getElementById("qr-img");
+      qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="
+        + encodeURIComponent(QR_DESTINO);
+
+      passScreen.classList.remove("hidden");
+    } else {
+      document.getElementById("fail-score").textContent =
+        `Has acertado ${score} de ${total} preguntas (mínimo: ${UMBRAL_APROBADO}).`;
+      failScreen.classList.remove("hidden");
+    }
+  }
+</script>
+
+</body>
+</html>
