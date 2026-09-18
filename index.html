@@ -204,6 +204,7 @@
   .gift-brand .tag { font-size: 7pt; margin: 0; }
   .gift-for { font-size: 7pt; text-transform: uppercase; letter-spacing: 2px; color: var(--red); margin-bottom: 2px; }
   .gift-name { font-size: 13pt; font-weight: 700; margin-bottom: 10px; }
+  .gift-tagline { font-size: 10.5pt; font-weight: 700; color: var(--red); line-height: 1.4; margin-bottom: 12px; }
   .gift-msg { font-size: 9pt; color: var(--text-dim); font-style: italic; line-height: 1.5; margin-bottom: 16px; }
   .qr-wrap { text-align: center; }
   .qr-wrap img { width: 130px; height: 130px; background: #fff; padding: 8px; border-radius: 8px; }
@@ -226,15 +227,12 @@
   <div id="start-screen">
     <div class="brand"><div class="brand-name">FIL<span>MIN</span></div></div>
     <div class="tag">Reto · Segunda Guerra Mundial</div>
-    <h1>🎖️ ¿Te ganas tu suscripción a Filmin?</h1>
+    <h1>🎖️ Para desbloquear tu regalo, Fernando</h1>
     <p class="sub">
-      2 preguntas sobre la Segunda Guerra Mundial. Acierta las dos
-      y desbloqueas un regalo: suscripción a Filmin, el hogar del cine
-      bélico — desde clásicos como <em>Salvar al soldado Ryan</em> y
-      <em>La lista de Schindler</em> hasta joyas de guerra independientes
-      y documentales históricos.
+      Debes contestar bien a estas dos preguntas sobre la Segunda Guerra
+      Mundial. Si las aciertas, desbloqueas tu regalo: Filmin, la mejor
+      plataforma para ver películas de guerra.
     </p>
-    <input type="text" id="player-name" placeholder="Tu nombre (opcional)">
     <button id="start-btn">Empezar el reto</button>
   </div>
 
@@ -273,13 +271,13 @@
           <div class="tag">Tarjeta Regalo</div>
         </div>
         <div class="gift-for">Para</div>
-        <div class="gift-name" id="gift-name">Ganador del reto</div>
+        <div class="gift-name" id="gift-name">Fernando</div>
+        <div class="gift-tagline">🪖 FILMIN — la mejor plataforma para ver películas de guerra</div>
         <div class="gift-msg">
-          🪖 Por tu victoria en el frente histórico: suscripción a Filmin,
-          el catálogo con más cine bélico — <em>Salvar al soldado Ryan</em>,
-          <em>La lista de Schindler</em>, <em>1917</em>, <em>Dunkerque</em>,
-          <em>Full Metal Jacket</em> y decenas de joyas de guerra clásicas,
-          independientes y documentales históricos.
+          <em>Salvar al soldado Ryan</em>, <em>La lista de Schindler</em>,
+          <em>1917</em>, <em>Dunkerque</em>, <em>Full Metal Jacket</em> y
+          decenas de joyas de guerra clásicas, independientes y
+          documentales históricos.
         </div>
         <div class="qr-wrap">
           <img id="qr-img" alt="Código QR del regalo">
@@ -402,8 +400,6 @@
     const total = QUESTIONS.length;
 
     if (score >= UMBRAL_APROBADO) {
-      const name = document.getElementById("player-name").value.trim();
-      document.getElementById("gift-name").textContent = name || "Ganador del reto";
       document.getElementById("pass-score").textContent =
         `Has acertado ${score} de ${total} preguntas.`;
 
