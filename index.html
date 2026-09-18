@@ -225,10 +225,10 @@
 
   <!-- PANTALLA INICIO -->
   <div id="start-screen">
-    <div class="tag">Reto Sorpresa · Segunda Guerra Mundial</div>
+    <div class="tag">Reto Sorpresa · Nivel avanzado</div>
     <h1>🎖️ Para desbloquear tu regalo, Fernando</h1>
     <p class="sub">
-      Debes contestar bien a estas dos preguntas sobre la Segunda Guerra
+      Debes contestar bien a estas cinco preguntas sobre la Segunda Guerra
       Mundial. Si las aciertas, desbloqueas tu regalo.
     </p>
     <button id="start-btn">Empezar el reto</button>
@@ -237,7 +237,7 @@
   <!-- PANTALLA QUIZ -->
   <div id="quiz-screen" class="hidden">
     <div class="progress-wrap">
-      <span id="q-counter">Pregunta 1/2</span>
+      <span id="q-counter">Pregunta 1/5</span>
       <span id="q-score">Aciertos: 0</span>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
@@ -251,7 +251,7 @@
     <div class="result-icon">🎬</div>
     <h1>¡Casi lo tienes!</h1>
     <p class="score-line" id="fail-score"></p>
-    <p class="sub">Hay que acertar las 2 preguntas para desbloquear el regalo. Repasa un poco de historia y vuelve a intentarlo.</p>
+    <p class="sub">Hay que acertar las 5 preguntas para desbloquear el regalo. Repasa un poco de historia y vuelve a intentarlo.</p>
     <button id="retry-btn">Volver a intentarlo</button>
   </div>
 
@@ -291,10 +291,10 @@
 
 <script>
   // ---- CONFIGURACIÓN ----
-  const UMBRAL_APROBADO = 2; // aciertos mínimos sobre 2 (hay que acertar las dos)
+  const UMBRAL_APROBADO = 5; // aciertos mínimos sobre 5 (hay que acertar las cinco)
   const QR_DESTINO = "https://www.filmin.es/regala"; // sustituye por tu código/enlace real si lo tienes
 
-  // ---- PREGUNTAS ----
+  // ---- PREGUNTAS (nivel avanzado) ----
   const QUESTIONS = [
     {
       q: "¿Cómo se llamaba el plan alemán para invadir el Reino Unido en 1940, finalmente cancelado?",
@@ -305,6 +305,21 @@
       q: "¿Qué acorazado alemán fue hundido por la Royal Navy en mayo de 1941 tras una intensa persecución en el Atlántico?",
       options: ["Tirpitz", "Scharnhorst", "Bismarck", "Graf Spee"],
       correct: 2
+    },
+    {
+      q: "¿Cómo se llamó la operación de sabotaje noruego-británica de 1943 que destruyó la planta de agua pesada de Vemork, clave en el programa atómico alemán?",
+      options: ["Operación Gunnerside", "Operación Chastise", "Operación Frankton", "Operación Jubilee"],
+      correct: 0
+    },
+    {
+      q: "¿Qué general alemán, apodado 'El Zorro del Desierto', comandó el Afrika Korps?",
+      options: ["Heinz Guderian", "Erwin Rommel", "Gerd von Rundstedt", "Albert Kesselring"],
+      correct: 1
+    },
+    {
+      q: "¿Cuál era el nombre en clave alemán de la ofensiva de las Ardenas de diciembre de 1944 ('Batalla de las Ardenas')?",
+      options: ["Wacht am Rhein", "Zitadelle", "Herbstnebel", "Fall Gelb"],
+      correct: 0
     }
   ];
 
